@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Node:
     def __init__(self, chave):
         self.chave = chave
@@ -175,3 +176,182 @@ print("Procura por 40:", encontra_resultado)
 
 encontra_resultado = avl_arvore.encontra_chave(30)
 print("Procura por 30:", encontra_resultado)
+=======
+class Node:
+    def __init__(self, chave):
+        self.chave = chave
+        self.to_left = None
+        self.to_right = None
+        self.altura = 1
+
+class ARVORE:
+    def __init__(self):
+        self.raiz = None
+
+    def altura(self, node):
+        if node is None:
+            return 0
+        return node.altura
+
+    def update_altura(self, node):
+        if node:
+            node.altura = 1 + max(self.altura(node.to_left), self.altura(node.to_right))
+
+    def fator_auto_balanceamento(self, node):
+        if node is None:
+            return 0
+        return self.altura(node.to_left) - self.altura(node.to_right)
+
+    def rotaciona_to_left(self, z):
+        y = z.to_right
+        T2 = y.to_left
+
+        y.to_left = z
+        z.to_right = T2
+
+        self.update_altura(z)
+        self.update_altura(y)
+
+        return y
+
+    def rotaciona_to_right(self, y):
+        x = y.to_left
+        T2 = x.to_right
+
+        x.to_right = y
+        y.to_left = T2
+
+        self.update_altura(y)
+        self.update_altura(x)
+
+        return x
+
+    def insert(self, raiz, chave):
+        if raiz is None:
+            return Node(chave)
+        
+        if chave < raiz.chave:
+            raiz.to_left = self.insert(raiz.to_left, chave)
+        else:
+            raiz.to_right = self.insert(raiz.to_right, chave)
+
+        self.update_altura(raiz)
+
+        balanco = self.fator_auto_balanceamento(raiz)
+
+        # Left
+        if balanco > 1:
+            if chave < raiz.to_left.chave:
+                return self.rotaciona_to_right(raiz)
+            else:
+                raiz.to_left = self.rotaciona_to_left(raiz.to_left)
+                return self.rotaciona_to_right(raiz)
+
+        # Right
+        if balanco < -1:
+            if chave > raiz.to_right.chave:
+                return self.rotaciona_to_left(raiz)
+            else:
+                raiz.to_right = self.rotaciona_to_right(raiz.to_right)
+                return self.rotaciona_to_left(raiz)
+
+        return raiz
+
+    def exclusao_foidificil(self, raiz, chave):
+        if raiz is None:
+            return raiz
+
+        if chave < raiz.chave:
+            raiz.to_left = self.exclusao_foidificil(raiz.to_left, chave)
+        elif chave > raiz.chave:
+            raiz.to_right = self.exclusao_foidificil(raiz.to_right, chave)
+        else:
+            if raiz.to_left is None:
+                return raiz.to_right
+            elif raiz.to_right is None:
+                return raiz.to_left
+
+            mininimo_valor_do_node = self.encontra_valor_minimo_node(raiz.to_right)
+            raiz.chave = mininimo_valor_do_node.chave
+            raiz.to_right = self.exclusao_foidificil(raiz.to_right, mininimo_valor_do_node.chave)
+
+        self.update_altura(raiz)
+
+        balanco = self.fator_auto_balanceamento(raiz)
+
+        # Left
+        if balanco > 1:
+            if self.fator_auto_balanceamento(raiz.to_left) >= 0:
+                return self.rotaciona_to_right(raiz)
+            else:
+                raiz.to_left = self.rotaciona_to_left(raiz.to_left)
+                return self.rotaciona_to_right(raiz)
+
+        # Right
+        if balanco < -1:
+            if self.fator_auto_balanceamento(raiz.to_right) <= 0:
+                return self.rotaciona_to_left(raiz)
+            else:
+                raiz.to_right = self.rotaciona_to_right(raiz.to_right)
+                return self.rotaciona_to_left(raiz)
+
+        return raiz
+
+    def encontra_valor_minimo_node(self, node):
+        current = node
+        while current.to_left is not None:
+            current = current.to_left
+        return current
+
+    def procura(self, raiz, chave):
+        if raiz is None or raiz.chave == chave:
+            return raiz
+
+        if chave < raiz.chave:
+            return self.procura(raiz.to_left, chave)
+
+        return self.procura(raiz.to_right, chave)
+
+    def insert_chave(self, chave):
+        self.raiz = self.insert(self.raiz, chave)
+
+    def delete_chave(self, chave):
+        self.raiz = self.exclusao_foidificil(self.raiz, chave)
+
+    def encontra_chave(self, chave):
+        result = self.procura(self.raiz, chave)
+        return result is not None
+
+    def passa_ordem(self, raiz):
+        result = []
+        if raiz:
+            result = self.passa_ordem(raiz.to_left)
+            result.append(raiz.chave)
+            result = result + self.passa_ordem(raiz.to_right)
+        return result
+
+    def mostra(self):
+        return self.passa_ordem(self.raiz)
+
+# TESTE
+avl_arvore = ARVORE()
+avl_arvore.insert_chave(10)
+avl_arvore.insert_chave(20)
+avl_arvore.insert_chave(30)
+avl_arvore.insert_chave(40)
+avl_arvore.insert_chave(50)
+avl_arvore.insert_chave(25)
+
+print("Árvore AVL após inserção:")
+print(avl_arvore.mostra())
+
+avl_arvore.delete_chave(30)
+print("Árvore AVL após exclusão:")
+print(avl_arvore.mostra())
+
+encontra_resultado = avl_arvore.encontra_chave(40)
+print("Procura por 40:", encontra_resultado)
+
+encontra_resultado = avl_arvore.encontra_chave(30)
+print("Procura por 30:", encontra_resultado)
+>>>>>>> c7fcb55dfc8a8efaaad91364964b098910468688
