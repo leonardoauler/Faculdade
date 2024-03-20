@@ -1,0 +1,47 @@
+1- Definição de tipos de dados: Na linguagem C, os tipos de dados são usados para armazenar diferentes tipos de informações, podem ser primitivos, 
+como inteiros (INT), ponto flutuante (FLOAT), caracteres (CHAR), ou tipos definidos pelo usuário, como estruturas (struct) e enumerações (enum).
+  
+  Exemplo:
+
+#include <stdio.h>
+// Define um novo tipo de dado chamado "int32_t" que armazena um inteiro de 32 bits
+typedef int int32_t;
+int main() {
+    int32_t numero = 12345;
+    // Imprime o número
+    printf("Numero: %d\n", numero);
+    return 0;
+}
+
+2- Expressões e atribuições: Em C, as expressões são usadas para realizar operações matemáticas e lógicas. As atribuições são usadas para atribuir 
+valores a variáveis, podem ser formadas por operadores aritméticos, relacionais, lógicos, entre outros.
+
+  Exemplo:
+    int a = 5;
+    int b = 10;
+    int soma = a + b;
+
+3- Estruturas de controle de fluxo (decisão e iteração): as estruturas de controle de fluxo são usadas para controlar o fluxo de execução do programa.
+As estruturas de decisão (if, else if, else) são usadas para tomar decisões com base em condições. As estruturas de iteração (for, while) são usadas para
+executar blocos de código repetidamente.
+
+  Exemplo:
+    int i;
+    for (i = 0; i < 5; i++) {
+      printf("O valor de i é: %d\n", i);
+    }
+4- Definição de sub-rotinas: Em C, as sub-rotinas são definidas através de funções. Funções são usadas para organizar e reutilizar código. As funções podem ser definidas para realizar tarefas específicas e 
+podem ser chamadas a partir de outras partes do programa.
+
+  Exemplo:
+  #include <stdio.h>
+
+int soma(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int a = 5;
+    int b = 10;
+    int resultado = soma(a, b);
+    printf("A soma de %d e
